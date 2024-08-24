@@ -132,11 +132,11 @@ const HigherLowerGame = () => {
 
   if (gameOver) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-100">
-        <Card className="w-full max-w-4xl p-6">
-          <h2 className="text-4xl font-bold mb-4">Game Over!</h2>
-          <p className="text-3xl mb-4">Your final score: {score}</p>
-          <Button onClick={restartGame} className="w-full text-xl py-4">Play Again</Button>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+        <Card className="w-full max-w-md p-6">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Game Over!</h2>
+          <p className="text-2xl sm:text-3xl mb-4">Your final score: {score}</p>
+          <Button onClick={restartGame} className="w-full text-lg sm:text-xl py-3 sm:py-4">Play Again</Button>
         </Card>
       </div>
     );
@@ -146,28 +146,28 @@ const HigherLowerGame = () => {
   const nextQuestion = questions[currentIndex + 1];
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       <header className="bg-blue-600 text-white p-4 relative">
-        <div className="container mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold">Higher or Lower?</h1>
-            <p className="text-lg">Guess if the next percentage is higher or lower!</p>
+        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
+          <div className="mb-4 sm:mb-0 text-center sm:text-left">
+            <h1 className="text-2xl sm:text-3xl font-bold">Higher or Lower?</h1>
+            <p className="text-sm sm:text-lg">Guess if the next percentage is higher or lower!</p>
           </div>
           <div className="flex items-center">
-            <div className="text-2xl font-bold mr-4">Score: {score}</div>
+            <div className="text-xl sm:text-2xl font-bold mr-4">Score: {score}</div>
             <Button 
               onClick={() => setShowPastQuestions(!showPastQuestions)}
-              className="bg-white text-blue-600"
+              className="bg-white text-blue-600 text-sm sm:text-base"
             >
               Past Questions
             </Button>
           </div>
         </div>
         {showPastQuestions && (
-          <div ref={menuRef} className="absolute right-4 top-full mt-2 bg-white text-black p-4 rounded-md shadow-lg max-h-96 overflow-y-auto">
+          <div ref={menuRef} className="absolute right-4 top-full mt-2 bg-white text-black p-4 rounded-md shadow-lg max-h-60 sm:max-h-96 overflow-y-auto w-64 sm:w-80">
             <h3 className="font-bold mb-2">Past Questions:</h3>
             {questions.slice(0, currentIndex).map((question, index) => (
-              <div key={index} className="mb-2">
+              <div key={index} className="mb-2 text-sm">
                 <p>{question[0]}</p>
                 <p className="font-bold">{question[1]}%</p>
               </div>
@@ -176,37 +176,37 @@ const HigherLowerGame = () => {
         )}
       </header>
       
-      <div className="flex-1 flex">
-        <Card className="flex-1 flex items-center justify-center">
-          <CardContent className="text-center p-6">
-            <h3 className="text-2xl font-semibold mb-4">Percentage of</h3>
-            <p className="text-3xl mb-6">{currentQuestion[0]}</p>
-            <p className="text-6xl font-bold">{currentQuestion[1]}%</p>
+      <div className="flex-1 flex flex-col sm:flex-row">
+        <Card className="flex-1 flex items-center justify-center m-2">
+          <CardContent className="text-center p-4 sm:p-6">
+            <h3 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4">Percentage of</h3>
+            <p className="text-lg sm:text-3xl mb-4 sm:mb-6">{currentQuestion[0]}</p>
+            <p className="text-4xl sm:text-6xl font-bold">{currentQuestion[1]}%</p>
           </CardContent>
         </Card>
         
-        <Card className={`flex-1 flex items-center justify-center ${answerStatus ? (answerStatus === 'correct' ? 'bg-green-100' : 'bg-red-100') : ''}`}>
-          <CardContent className="text-center p-6">
-            <h3 className="text-2xl font-semibold mb-4">Is the percentage of</h3>
-            <p className="text-3xl mb-6">{nextQuestion[0]}</p>
+        <Card className={`flex-1 flex items-center justify-center m-2 ${answerStatus ? (answerStatus === 'correct' ? 'bg-green-100' : 'bg-red-100') : ''}`}>
+          <CardContent className="text-center p-4 sm:p-6">
+            <h3 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4">Is the percentage of</h3>
+            <p className="text-lg sm:text-3xl mb-4 sm:mb-6">{nextQuestion[0]}</p>
             {showAnswer ? (
-              <p className="text-6xl font-bold">{nextQuestion[1]}%</p>
+              <p className="text-4xl sm:text-6xl font-bold">{nextQuestion[1]}%</p>
             ) : (
-              <div className="flex justify-center space-x-4">
+              <div className="flex justify-center space-x-2 sm:space-x-4">
                 <Button
                   onClick={() => handleGuess('higher')}
                   disabled={showAnswer}
-                  className="text-2xl py-4 px-8"
+                  className="text-lg sm:text-2xl py-2 px-4 sm:py-4 sm:px-8"
                 >
-                  <ArrowUpIcon className="mr-2 h-8 w-8" />
+                  <ArrowUpIcon className="mr-1 sm:mr-2 h-6 w-6 sm:h-8 sm:w-8" />
                   Higher
                 </Button>
                 <Button
                   onClick={() => handleGuess('lower')}
                   disabled={showAnswer}
-                  className="text-2xl py-4 px-8"
+                  className="text-lg sm:text-2xl py-2 px-4 sm:py-4 sm:px-8"
                 >
-                  <ArrowDownIcon className="mr-2 h-8 w-8" />
+                  <ArrowDownIcon className="mr-1 sm:mr-2 h-6 w-6 sm:h-8 sm:w-8" />
                   Lower
                 </Button>
               </div>
