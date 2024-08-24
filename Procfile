@@ -1,0 +1,1 @@
+web: cd higher-lower-cms && npm start

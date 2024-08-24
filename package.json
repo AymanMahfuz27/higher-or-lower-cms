@@ -1,0 +1,13 @@
+{
+    "name": "higher-or-lower-app",
+    "version": "1.0.0",
+    "description": "Higher or Lower Game",
+    "engines": {
+      "node": "14.x"
+    },
+    "scripts": {
+      "start": "cd higher-lower-cms && npm start",
+      "build": "cd higher-lower-cms && npm install && npm run build",
+      "test": "cd higher-lower-cms && npm test"
+    }
+  }
