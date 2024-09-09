@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
 import { Button } from './components/ui/button';
 import { ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
 
+
 const data = {
   "Republicans say they would be pleased if the supreme court reduced abortion rights?": 43,
   "Republicans say that abortion should never be permitted?": 19,
@@ -53,6 +54,26 @@ const data = {
   "Households are dog owners?": 54,
   "Adults in a relationship say they are satisfied with their relationship?": 94
 };
+const ashwinOrderData = {
+  "Adults believe in UFOs?": 39,
+  "Democrats support the death penalty for convicted murderers?": 44,
+  "Adults say they would like to bring back dinosaurs?": 12,
+  "Adults say they drink coffee every day?": 62,
+  "Households are dog owners?": 54,
+  "Republicans support requiring police officers to wear body cameras while on duty?": 88,
+  "Adults are single?": 31,
+  "Adults have at least one tattoo?": 26,
+  "Adults are single?": 31,
+  "Democrats support requiring showing a government photo ID when voting?": 48,
+  "Adults wear jeans everyday?": 39,
+  "Adults consume dairy everyday?": 79,
+  "Adults say they drink coffee every day?": 62,
+  "Households with cars?": 92,
+  "Republicans support requiring background checks for gun purchases at gun shows or private sales?": 82,
+  "Adults say they would like to bring back dinosaurs?": 12
+};
+
+
 
 const shuffleArray = (array) => {
   const shuffled = [...array];
@@ -73,12 +94,28 @@ const HigherLowerGame = () => {
   const [gameOver, setGameOver] = useState(false);
   const [answerStatus, setAnswerStatus] = useState(null);
   const [showPastQuestions, setShowPastQuestions] = useState(false);
+  const [isAshwinMode, setIsAshwinMode] = useState(false);
   const menuRef = useRef(null);
 
   useEffect(() => {
-    const shuffledQuestions = shuffleArray(Object.entries(data));
-    setQuestions(shuffledQuestions);
-  }, []);
+    resetGame();
+  }, [isAshwinMode]);
+
+  const resetGame = () => {
+    let newQuestions;
+    if (isAshwinMode) {
+      newQuestions = Object.entries(ashwinOrderData);
+    } else {
+      newQuestions = shuffleArray(Object.entries(data));
+    }
+    setQuestions(newQuestions);
+    setCurrentIndex(0);
+    setScore(0);
+    setShowAnswer(false);
+    setGameOver(false);
+    setAnswerStatus(null);
+  };
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -144,6 +181,9 @@ const HigherLowerGame = () => {
 
   const currentQuestion = questions[currentIndex];
   const nextQuestion = questions[currentIndex + 1];
+  const toggleAshwinMode = () => {
+    setIsAshwinMode(!isAshwinMode);
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
@@ -155,6 +195,15 @@ const HigherLowerGame = () => {
           </div>
           <div className="flex items-center">
             <div className="text-xl sm:text-2xl font-bold mr-4">Score: {score}</div>
+            <div className="flex items-center mr-4">
+              <Button 
+              onClick={toggleAshwinMode}
+              className={`mr-4 ${isAshwinMode ? 'bg-green-500' : 'bg-gray-300'} text-white`}
+            >
+              {isAshwinMode ? 'Ashwin Mode: ON' : 'Ashwin Mode: OFF'}
+            </Button>
+
+            </div>
             <Button 
               onClick={() => setShowPastQuestions(!showPastQuestions)}
               className="bg-white text-blue-600 text-sm sm:text-base"
@@ -163,6 +212,7 @@ const HigherLowerGame = () => {
             </Button>
           </div>
         </div>
+
         {showPastQuestions && (
           <div ref={menuRef} className="absolute right-4 top-full mt-2 bg-white text-black p-4 rounded-md shadow-lg max-h-60 sm:max-h-96 overflow-y-auto w-64 sm:w-80">
             <h3 className="font-bold mb-2">Past Questions:</h3>
