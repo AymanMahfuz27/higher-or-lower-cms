@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from './components/ui/card';
 import { Button } from './components/ui/button';
@@ -281,7 +280,11 @@ const HigherLowerGame = () => {
             <h3 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4">
               Percentage of 
             </h3>
-            <p className="text-lg sm:text-3xl mb-4 sm:mb-6">
+            <p
+              className={`${
+                currentQuestion[0].length > 50 ? 'text-sm sm:text-lg' : 'text-lg sm:text-3xl'
+              } mb-4 sm:mb-6`}
+            >
               {currentQuestion[0]}
             </p>
             <p className="text-4xl sm:text-6xl font-bold">
@@ -303,7 +306,11 @@ const HigherLowerGame = () => {
             <h3 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4">
               Percentage of
             </h3>
-            <p className="text-lg sm:text-3xl mb-4 sm:mb-6">
+            <p
+              className={`${
+                nextQuestion[0].length > 50 ? 'text-sm sm:text-lg' : 'text-lg sm:text-3xl'
+              } mb-4 sm:mb-6`}
+            >
               {nextQuestion[0]}
             </p>
             {showAnswer ? (
@@ -334,22 +341,23 @@ const HigherLowerGame = () => {
         </Card>
 
         {/* Overlayed content */}
-        <div className="absolute inset-0 flex flex-col items-center pointer-events-none">
-          <div className="mt-4 flex flex-col items-center space-y-2">
-            {/* Lives with hearts */}
-            {renderLives()}
-            {/* Score with background */}
-            <div className="bg-blue-500 text-white rounded-md px-2 py-1 text-xl sm:text-2xl font-bold">
-              Correct Streak: {score}
-            </div>
-          </div>
-          <div className="flex-1 flex items-center justify-center">
-            {/* VS icon with background */}
-            <div className="flex items-center justify-center rounded-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white h-20 w-20 sm:h-28 sm:w-28">
-              <span className="text-4xl sm:text-6xl font-bold">VS</span>
-            </div>
-          </div>
-        </div>
+        <div className="absolute inset-0 flex flex-col items-center justify-between pointer-events-none">
+  <div className="mt-4 flex flex-col items-center space-y-2">
+    {/* Lives with hearts */}
+    {renderLives()}
+    {/* Score with background */}
+    <div className="bg-blue-500 text-white rounded-md px-2 py-1 text-xl sm:text-2xl font-bold">
+      Correct Streak: {score}
+    </div>
+  </div>
+  <div className="flex-1 flex items-center justify-center mt-4 mb-4">
+    {/* VS icon with background */}
+    <div className="flex items-center justify-center rounded-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white h-20 w-20 sm:h-28 sm:w-28">
+      <span className="text-4xl sm:text-6xl font-bold">VS</span>
+    </div>
+  </div>
+</div>
+
       </div>
     </div>
   );
