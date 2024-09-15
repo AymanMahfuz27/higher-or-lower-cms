@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent } from './components/ui/card';
-import { Button } from './components/ui/button';
-import { ArrowUpIcon, ArrowDownIcon, HeartIcon } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import { Card, CardContent } from "./components/ui/card";
+import { Button } from "./components/ui/button";
+import { ArrowUpIcon, ArrowDownIcon, HeartIcon } from "lucide-react";
 
 const data = {
   "Republicans who say they would be pleased if the supreme court reduced abortion rights": 43,
@@ -51,7 +51,7 @@ const data = {
   "TV-owning adults who watched Neil Armstrong set foot on the moon": 94,
   "Adults who say they have had a teacher who changed their life for the better": 94,
   "Households who are dog owners": 54,
-  "Adults in a relationship who say they are satisfied with their relationship": 94
+  "Adults in a relationship who say they are satisfied with their relationship": 94,
 };
 
 const ashwinOrderData = {
@@ -98,6 +98,11 @@ const HigherLowerGame = () => {
     resetGame();
   }, [isAshwinMode]);
 
+  const logUserAction = (action, details) => {
+    console.log("User action:", action, details);
+    // TODO: Implement API call to backend to log action
+  };
+
   const resetGame = () => {
     let newQuestions;
     if (isAshwinMode) {
@@ -121,9 +126,9 @@ const HigherLowerGame = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -134,10 +139,20 @@ const HigherLowerGame = () => {
     const nextPercentage = questions[currentIndex + 1][1];
 
     const isCorrect =
-      (guess === 'higher' && nextPercentage > currentPercentage) ||
-      (guess === 'lower' && nextPercentage < currentPercentage);
+      (guess === "higher" && nextPercentage > currentPercentage) ||
+      (guess === "lower" && nextPercentage < currentPercentage);
 
-    setAnswerStatus(isCorrect ? 'correct' : 'incorrect');
+    setAnswerStatus(isCorrect ? "correct" : "incorrect");
+
+    // Log the user's guess
+    logUserAction("guess", {
+      guess,
+      isCorrect,
+      currentQuestion: questions[currentIndex][0],
+      nextQuestion: questions[currentIndex + 1][0],
+      currentPercentage,
+      nextPercentage,
+    });
 
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
@@ -146,6 +161,7 @@ const HigherLowerGame = () => {
         const newLives = prevLives - 1;
         if (newLives <= 0) {
           setGameOver(true);
+          logUserAction("gameOver", { finalScore: score });
         }
         return newLives;
       });
@@ -172,11 +188,11 @@ const HigherLowerGame = () => {
   if (gameOver) {
     let message;
     if (score < 5) {
-      message = 'Better luck next time!';
+      message = "Better luck next time!";
     } else if (score < 10) {
-      message = 'Good job!';
+      message = "Good job!";
     } else {
-      message = 'Excellent work!';
+      message = "Excellent work!";
     }
 
     return (
@@ -221,8 +237,8 @@ const HigherLowerGame = () => {
         <HeartIcon
           key={i}
           className="h-6 w-6 sm:h-8 sm:w-8"
-          stroke={i < lives ? 'red' : 'gray'}
-          fill={i < lives ? 'red' : 'none'}
+          stroke={i < lives ? "red" : "gray"}
+          fill={i < lives ? "red" : "none"}
         />
       ))}
     </div>
@@ -230,28 +246,26 @@ const HigherLowerGame = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
-      <header className="bg-blue-600 text-white p-4 relative">
+      <header className="bg-blue-600 text-white p-4">
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
           <div className="mb-4 sm:mb-0 text-center sm:text-left">
             <h1 className="text-2xl sm:text-3xl font-bold">Higher or Lower?</h1>
-            <p className="text-sm sm:text-lg">
+            <p className="text-sm sm:text-base">
               Guess if the next percentage is higher or lower!
             </p>
           </div>
-          <div className="flex items-center">
-            <div className="flex items-center mr-4">
-              <Button
-                onClick={toggleAshwinMode}
-                className={`mr-4 ${
-                  isAshwinMode ? 'bg-green-500' : 'bg-gray-300'
-                } text-white`}
-              >
-                {isAshwinMode ? 'Trial Mode: ON' : 'Trial Mode: OFF'}
-              </Button>
-            </div>
+          <div className="flex items-center space-x-2">
+            <Button
+              onClick={toggleAshwinMode}
+              className={`mr-2 ${
+                isAshwinMode ? "bg-green-500" : "bg-gray-300"
+              } text-white text-xs sm:text-sm`}
+            >
+              {isAshwinMode ? "Trial Mode: ON" : "Trial Mode: OFF"}
+            </Button>
             <Button
               onClick={() => setShowPastQuestions(!showPastQuestions)}
-              className="bg-white text-blue-600 text-sm sm:text-base"
+              className="bg-white text-blue-600 text-xs sm:text-sm"
             >
               Past Cards
             </Button>
@@ -261,7 +275,7 @@ const HigherLowerGame = () => {
         {showPastQuestions && (
           <div
             ref={menuRef}
-            className="absolute right-4 top-full mt-2 bg-white text-black p-4 rounded-md shadow-lg max-h-60 sm:max-h-96 overflow-y-auto w-64 sm:w-80"
+            className="absolute right-4 top-full mt-2 bg-white text-black p-4 rounded-md shadow-lg max-h-60 sm:max-h-96 overflow-y-auto w-64 sm:w-80 z-10"
           >
             <h3 className="font-bold mb-2">Past Cards:</h3>
             {questions.slice(0, currentIndex).map((question, index) => (
@@ -274,90 +288,94 @@ const HigherLowerGame = () => {
         )}
       </header>
 
-      <div className="flex-1 flex flex-col sm:flex-row relative">
-        <Card className="flex-1 flex items-center justify-center m-2">
-          <CardContent className="text-center p-4 sm:p-6">
-            <h3 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4">
-              Percentage of 
-            </h3>
-            <p
-              className={`${
-                currentQuestion[0].length > 50 ? 'text-sm sm:text-lg' : 'text-lg sm:text-3xl'
-              } mb-4 sm:mb-6`}
-            >
-              {currentQuestion[0]}
-            </p>
-            <p className="text-4xl sm:text-6xl font-bold">
-              {currentQuestion[1]}%
-            </p>
-          </CardContent>
-        </Card>
+      <div className="flex-1 flex flex-col sm:flex-row relative p-2 sm:p-4">
+        {/* Score and Lives */}
+        <div className="absolute top-0 left-0 right-0 flex justify-between items-center p-2 sm:p-4 z-10">
+          <div className="bg-blue-500 text-white rounded-md px-2 py-1 text-sm sm:text-xl font-bold">
+            Correct Streak: {score}
+          </div>
+          <div className="flex space-x-1 bg-blue-500 text-white rounded-md px-2 py-1 text-sm sm:text-xl font-bold">
+            {[...Array(3)].map((_, i) => (
+              <HeartIcon
+                key={i}
+                className="h-5 w-5 sm:h-6 sm:w-6"
+                stroke={i < lives ? "red" : "gray"}
+                fill={i < lives ? "red" : "none"}
+              />
+            ))}
+          </div>
+        </div>
 
-        <Card
-          className={`flex-1 flex items-center justify-center m-2 ${
-            answerStatus
-              ? answerStatus === 'correct'
-                ? 'bg-green-100'
-                : 'bg-red-100'
-              : ''
-          }`}
-        >
-          <CardContent className="text-center p-4 sm:p-6">
-            <h3 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4">
-              Percentage of
-            </h3>
-            <p
-              className={`${
-                nextQuestion[0].length > 50 ? 'text-sm sm:text-lg' : 'text-lg sm:text-3xl'
-              } mb-4 sm:mb-6`}
-            >
-              {nextQuestion[0]}
-            </p>
-            {showAnswer ? (
-              <p className="text-4xl sm:text-6xl font-bold">
-                {nextQuestion[1]}%
+        {/* Cards and VS icon */}
+        <div className="flex-1 flex flex-col sm:flex-row items-stretch justify-center mt-4 relative">
+          <Card className="flex-1 flex items-center justify-center rounded-r-none">
+            <CardContent className="text-center p-2 sm:p-4 w-full min-w-[300px] max-w-sm mx-auto">
+              {" "}
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-1 sm:mb-2">
+                Percentage of
+              </h3>
+              <p className="text-sm sm:text-base lg:text-lg mb-1 sm:mb-2 h-16 sm:h-20 overflow-y-auto">
+                {currentQuestion[0]}
               </p>
-            ) : (
-              <div className="flex justify-center space-x-2 sm:space-x-4">
-                <Button
-                  onClick={() => handleGuess('higher')}
-                  disabled={showAnswer}
-                  className="text-lg sm:text-2xl py-2 px-4 sm:py-4 sm:px-8"
-                >
-                  <ArrowUpIcon className="mr-1 sm:mr-2 h-6 w-6 sm:h-8 sm:w-8" />
-                  Higher
-                </Button>
-                <Button
-                  onClick={() => handleGuess('lower')}
-                  disabled={showAnswer}
-                  className="text-lg sm:text-2xl py-2 px-4 sm:py-4 sm:px-8"
-                >
-                  <ArrowDownIcon className="mr-1 sm:mr-2 h-6 w-6 sm:h-8 sm:w-8" />
-                  Lower
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+              <p className="text-3xl sm:text-4xl lg:text-5xl font-bold">
+                {currentQuestion[1]}%
+              </p>
+            </CardContent>
+          </Card>
 
-        {/* Overlayed content */}
-        <div className="absolute inset-0 flex flex-col items-center justify-between pointer-events-none">
-  <div className="mt-4 flex flex-col items-center space-y-2">
-    {/* Lives with hearts */}
-    {renderLives()}
-    {/* Score with background */}
-    <div className="bg-blue-500 text-white rounded-md px-2 py-1 text-xl sm:text-2xl font-bold">
-      Correct Streak: {score}
-    </div>
-  </div>
-  <div className="flex-1 flex items-center justify-center mt-4 mb-4">
-    {/* VS icon with background */}
-    <div className="flex items-center justify-center rounded-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white h-20 w-20 sm:h-28 sm:w-28">
-      <span className="text-4xl sm:text-6xl font-bold">VS</span>
-    </div>
-  </div>
-</div>
+          <Card
+            className={`flex-1 flex items-center justify-center rounded-l-none ${
+              answerStatus
+                ? answerStatus === "correct"
+                  ? "bg-green-100"
+                  : "bg-red-100"
+                : ""
+            }`}
+          >
+            <CardContent className="text-center p-2 sm:p-4 w-full min-w-[300px] max-w-sm mx-auto">
+              {" "}
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-1 sm:mb-2">
+                Percentage of
+              </h3>
+              <p className="text-sm sm:text-base lg:text-lg mb-1 sm:mb-2 h-16 sm:h-20 overflow-y-auto">
+                {nextQuestion[0]}
+              </p>
+              {showAnswer ? (
+                <p className="text-3xl sm:text-4xl lg:text-5xl font-bold">
+                  {nextQuestion[1]}%
+                </p>
+              ) : (
+                <div className="flex justify-center space-x-4">
+                  <Button
+                    onClick={() => handleGuess("higher")}
+                    disabled={showAnswer}
+                    className="text-sm sm:text-base lg:text-lg py-2 px-4 border-2 border-green-500 bg-green-100 hover:bg-green-200 text-green-700"
+                  >
+                    <ArrowUpIcon className="mr-1 h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
+                    Higher
+                  </Button>
+                  <Button
+                    onClick={() => handleGuess("lower")}
+                    disabled={showAnswer}
+                    className="text-sm sm:text-base lg:text-lg py-2 px-4 border-2 border-red-500 bg-red-100 hover:bg-red-200 text-red-700"
+                  >
+                    <ArrowDownIcon className="mr-1 h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6" />
+                    Lower
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
+          {/* VS icon overlay */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="flex items-center justify-center rounded-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24">
+              <span className="text-xl sm:text-2xl lg:text-3xl font-bold">
+                VS
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
