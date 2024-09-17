@@ -314,7 +314,7 @@ const HigherLowerGame = () => {
               <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-1 sm:mb-2">
                 Percentage of
               </h3>
-              <p className="text-sm sm:text-base lg:text-lg mb-1 sm:mb-2 h-16 sm:h-20 overflow-y-auto">
+              <p className="text-sm sm:text-base lg:text-lg mb-1 sm:mb-2 h-16 sm:h-20">
                 {currentQuestion[0]}
               </p>
               <p className="text-3xl sm:text-4xl lg:text-5xl font-bold">
@@ -337,7 +337,7 @@ const HigherLowerGame = () => {
               <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-1 sm:mb-2">
                 Percentage of
               </h3>
-              <p className="text-sm sm:text-base lg:text-lg mb-1 sm:mb-2 h-16 sm:h-20 overflow-y-auto">
+              <p className="text-sm sm:text-base lg:text-lg mb-1 sm:mb-2 h-16 sm:h-20">
                 {nextQuestion[0]}
               </p>
               {showAnswer ? (
