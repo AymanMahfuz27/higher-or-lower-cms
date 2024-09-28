@@ -192,16 +192,17 @@ const HigherLowerGame = () => {
           </p>
           <div className="mb-4">
             <h3 className="font-bold mb-2 text-gray-700">Cards Played:</h3>
-            <div className="flex space-x-4 overflow-x-auto pb-4">
-              {questions.slice(0, currentIndex + 1).map((question, index) => (
-                <Card key={index} className="min-w-[200px] bg-blue-50 shadow">
-                  <CardContent className="p-4">
-                    <p className="text-sm text-gray-600">{question[0]}</p>
-                    <p className="font-bold text-blue-600">{question[1]}%</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <div className="flex flex-col space-y-4 overflow-y-auto pb-4 max-h-80">
+  {questions.slice(0, currentIndex + 1).map((question, index) => (
+    <Card key={index} className="w-full bg-blue-50 shadow">
+      <CardContent className="p-4">
+        <p className="text-sm text-gray-600">{question[0]}</p>
+        <p className="font-bold text-blue-600">{question[1]}%</p>
+      </CardContent>
+    </Card>
+  ))}
+</div>
+
           </div>
           <Button
             onClick={restartGame}

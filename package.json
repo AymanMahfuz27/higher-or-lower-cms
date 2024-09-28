@@ -3,11 +3,19 @@
     "version": "1.0.0",
     "description": "Higher or Lower Game",
     "engines": {
-      "node": "14.x"
+        "node": "14.x"
     },
     "scripts": {
-      "start": "cd higher-lower-cms && npm start",
-      "build": "cd higher-lower-cms && npm install && npm run build",
-      "test": "cd higher-lower-cms && npm test"
+        "start": "cd higher-lower-cms && npm start",
+        "build": "cd higher-lower-cms && npm install && npm run build",
+        "test": "cd higher-lower-cms && npm test"
+    },
+    "dependencies": {
+        "class-variance-authority": "^0.7.0",
+        "lucide-react": "^0.446.0",
+        "radix-ui": "^1.0.1",
+        "react-dom": "^18.3.1",
+        "react-scripts": "^5.0.1",
+        "web-vitals": "^4.2.3"
     }
-  }
+}
