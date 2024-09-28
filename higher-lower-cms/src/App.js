@@ -1,58 +1,58 @@
+// const data = {
+//   "Republicans who say they would be pleased if the supreme court reduced abortion rights": 43,
+//   "Republicans who say that abortion should never be permitted": 19,
+//   "Republicans who are willing to open up protected nature areas for economic development": 16,
+//   "Republicans who say that the US spends too much on alternative energy sources": 23,
+//   "Republicans who support laws that protect gays and lesbians against job discrimination": 81,
+//   "Republicans who support requiring background checks for gun purchases at gun shows or private sales": 82,
+//   "Republicans who say that the government should make it easier to buy a gun": 11,
+//   "Republicans who say that the US spends too much on the nation's health": 16,
+//   "Republicans who support making all unauthorized immigrants felons and sending them back": 24,
+//   "Republicans who support sending back children who were brought to the US illegally and have lived here for 10+ years": 21,
+//   "Republicans who say that the federal minimum wage should be decreased": 4,
+//   "Republicans who oppose requiring employers to offer paid leave to parents of new children": 13,
+//   "Republicans who say that the police officers never use more force than necessary": 3,
+//   "Republicans who support requiring police officers to wear body cameras while on duty": 88,
+//   "Republicans who say that blacks face no discrimination at all in the US": 5,
+//   "Republicans who believe that the legacy of slavery affects the position of black people in society today": 68,
+//   "Republicans who think that high-income individuals pay the right amount in taxes": 29,
+//   "Republicans who say that eligible voters are never denied the right to vote": 23,
+//   "Democrats who believe that climate change has been mostly due to human activity": 69,
+//   "Democrats who are unwilling to pay much higher prices in order to protect the environment": 17,
+//   "Democrats who support the death penalty for convicted murderers": 44,
+//   "Democrats who oppose making free trade agreements with other countries": 7,
+//   "Democrats who support lowering the eligibility age for Medicare from 65 to 50": 77,
+//   "Democrats who feel that courts deal too harshly with criminals": 40,
+//   "Democrats who say that the US spends too much on reducing crime rates": 8,
+//   "Democrats who believe that the legacy of slavery affects the position of black people in society today": 97,
+//   "Democrats who think that high-income individuals pay too little in taxes": 75,
+//   "Democrats who say that transgender people face no discrimination at all in the US": 7,
+//   "Democrats who support requiring showing a government photo ID when voting": 48,
+//   "Democrats who say that eligible voters are never denied the right to vote": 7,
+//   "Democrats who say that the US spends too little on assistance to the poor": 44,
+//   "Adults who say they would like to bring back dinosaurs": 12,
+//   "Adults who say that chocolate glazed donuts are their favorite donuts": 12,
+//   "Adults who in a relationship met their partner online": 12,
+//   "Adults who have at least one tattoo": 26,
+//   "Adults who are single": 31,
+//   "Adults who consider a hotdog to be a sandwich": 36,
+//   "Adults who believe in ghosts": 36,
+//   "Adults who like their eggs scrambled": 37,
+//   "Adults who believe in UFOs": 39,
+//   "Dog owners who got their dogs from a shelter": 40,
+//   "Adults who set an alarm but do not snooze when waking up": 40,
+//   "Pet owners who dress up their pets for Halloween": 45,
+//   "Adults who say they drink coffee every day": 62,
+//   "TV-owning adults who watched Neil Armstrong set foot on the moon": 94,
+//   "Adults who say they have had a teacher who changed their life for the better": 94,
+//   "Households who are dog owners": 54,
+//   "Adults in a relationship who say they are satisfied with their relationship": 94,
+// };
+
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "./components/ui/card";
 import { Button } from "./components/ui/button";
 import { ArrowUpIcon, ArrowDownIcon, HeartIcon } from "lucide-react";
-
-const data = {
-  "Republicans who say they would be pleased if the supreme court reduced abortion rights": 43,
-  "Republicans who say that abortion should never be permitted": 19,
-  "Republicans who are willing to open up protected nature areas for economic development": 16,
-  "Republicans who say that the US spends too much on alternative energy sources": 23,
-  "Republicans who support laws that protect gays and lesbians against job discrimination": 81,
-  "Republicans who support requiring background checks for gun purchases at gun shows or private sales": 82,
-  "Republicans who say that the government should make it easier to buy a gun": 11,
-  "Republicans who say that the US spends too much on the nation's health": 16,
-  "Republicans who support making all unauthorized immigrants felons and sending them back": 24,
-  "Republicans who support sending back children who were brought to the US illegally and have lived here for 10+ years": 21,
-  "Republicans who say that the federal minimum wage should be decreased": 4,
-  "Republicans who oppose requiring employers to offer paid leave to parents of new children": 13,
-  "Republicans who say that the police officers never use more force than necessary": 3,
-  "Republicans who support requiring police officers to wear body cameras while on duty": 88,
-  "Republicans who say that blacks face no discrimination at all in the US": 5,
-  "Republicans who believe that the legacy of slavery affects the position of black people in society today": 68,
-  "Republicans who think that high-income individuals pay the right amount in taxes": 29,
-  "Republicans who say that eligible voters are never denied the right to vote": 23,
-  "Democrats who believe that climate change has been mostly due to human activity": 69,
-  "Democrats who are unwilling to pay much higher prices in order to protect the environment": 17,
-  "Democrats who support the death penalty for convicted murderers": 44,
-  "Democrats who oppose making free trade agreements with other countries": 7,
-  "Democrats who support lowering the eligibility age for Medicare from 65 to 50": 77,
-  "Democrats who feel that courts deal too harshly with criminals": 40,
-  "Democrats who say that the US spends too much on reducing crime rates": 8,
-  "Democrats who believe that the legacy of slavery affects the position of black people in society today": 97,
-  "Democrats who think that high-income individuals pay too little in taxes": 75,
-  "Democrats who say that transgender people face no discrimination at all in the US": 7,
-  "Democrats who support requiring showing a government photo ID when voting": 48,
-  "Democrats who say that eligible voters are never denied the right to vote": 7,
-  "Democrats who say that the US spends too little on assistance to the poor": 44,
-  "Adults who say they would like to bring back dinosaurs": 12,
-  "Adults who say that chocolate glazed donuts are their favorite donuts": 12,
-  "Adults who in a relationship met their partner online": 12,
-  "Adults who have at least one tattoo": 26,
-  "Adults who are single": 31,
-  "Adults who consider a hotdog to be a sandwich": 36,
-  "Adults who believe in ghosts": 36,
-  "Adults who like their eggs scrambled": 37,
-  "Adults who believe in UFOs": 39,
-  "Dog owners who got their dogs from a shelter": 40,
-  "Adults who set an alarm but do not snooze when waking up": 40,
-  "Pet owners who dress up their pets for Halloween": 45,
-  "Adults who say they drink coffee every day": 62,
-  "TV-owning adults who watched Neil Armstrong set foot on the moon": 94,
-  "Adults who say they have had a teacher who changed their life for the better": 94,
-  "Households who are dog owners": 54,
-  "Adults in a relationship who say they are satisfied with their relationship": 94,
-};
 
 const ashwinOrderData = {
   "Adults who believe in UFOs": 39,
@@ -73,15 +73,6 @@ const ashwinOrderData = {
   "Adults who say they would like to bring back dinosaurs": 12,
 };
 
-const shuffleArray = (array) => {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-};
-
 const HigherLowerGame = () => {
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -91,12 +82,11 @@ const HigherLowerGame = () => {
   const [gameOver, setGameOver] = useState(false);
   const [answerStatus, setAnswerStatus] = useState(null);
   const [showPastQuestions, setShowPastQuestions] = useState(false);
-  const [isAshwinMode, setIsAshwinMode] = useState(false);
   const menuRef = useRef(null);
 
   useEffect(() => {
     resetGame();
-  }, [isAshwinMode]);
+  }, []);
 
   const logUserAction = (action, details) => {
     console.log("User action:", action, details);
@@ -104,12 +94,7 @@ const HigherLowerGame = () => {
   };
 
   const resetGame = () => {
-    let newQuestions;
-    if (isAshwinMode) {
-      newQuestions = Object.entries(ashwinOrderData);
-    } else {
-      newQuestions = shuffleArray(Object.entries(data));
-    }
+    let newQuestions = Object.entries(ashwinOrderData);
     setQuestions(newQuestions);
     setCurrentIndex(0);
     setScore(0);
@@ -227,22 +212,6 @@ const HigherLowerGame = () => {
 
   const currentQuestion = questions[currentIndex];
   const nextQuestion = questions[currentIndex + 1];
-  const toggleAshwinMode = () => {
-    setIsAshwinMode(!isAshwinMode);
-  };
-
-  const renderLives = () => (
-    <div className="flex space-x-1">
-      {[...Array(3)].map((_, i) => (
-        <HeartIcon
-          key={i}
-          className="h-6 w-6 sm:h-8 sm:w-8"
-          stroke={i < lives ? "red" : "gray"}
-          fill={i < lives ? "red" : "none"}
-        />
-      ))}
-    </div>
-  );
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
@@ -255,14 +224,6 @@ const HigherLowerGame = () => {
             </p>
           </div>
           <div className="flex items-center space-x-2">
-            <Button
-              onClick={toggleAshwinMode}
-              className={`mr-2 ${
-                isAshwinMode ? "bg-green-500" : "bg-gray-300"
-              } text-white text-xs sm:text-sm`}
-            >
-              {isAshwinMode ? "Trial Mode: ON" : "Trial Mode: OFF"}
-            </Button>
             <Button
               onClick={() => setShowPastQuestions(!showPastQuestions)}
               className="bg-white text-blue-600 text-xs sm:text-sm"
