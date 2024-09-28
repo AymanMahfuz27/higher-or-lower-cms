@@ -181,19 +181,23 @@ const HigherLowerGame = () => {
     }
 
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-        <Card className="w-full max-w-md p-6">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Game Over!</h2>
-          <p className="text-2xl sm:text-3xl mb-4">{message}</p>
-          <p className="text-2xl sm:text-3xl mb-4">Your final score: {score}</p>
+      <div className="flex items-center justify-center min-h-screen bg-blue-100 p-4">
+        <Card className="w-full max-w-md p-6 bg-white shadow-lg rounded-lg">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-blue-600">
+            Game Over!
+          </h2>
+          <p className="text-2xl sm:text-3xl mb-4 text-gray-700">{message}</p>
+          <p className="text-2xl sm:text-3xl mb-4 text-blue-600 font-bold">
+            Your final score: {score}
+          </p>
           <div className="mb-4">
-            <h3 className="font-bold mb-2">Cards Played:</h3>
+            <h3 className="font-bold mb-2 text-gray-700">Cards Played:</h3>
             <div className="flex space-x-4 overflow-x-auto pb-4">
               {questions.slice(0, currentIndex + 1).map((question, index) => (
-                <Card key={index} className="min-w-[200px]">
+                <Card key={index} className="min-w-[200px] bg-blue-50 shadow">
                   <CardContent className="p-4">
-                    <p>{question[0]}</p>
-                    <p className="font-bold">{question[1]}%</p>
+                    <p className="text-sm text-gray-600">{question[0]}</p>
+                    <p className="font-bold text-blue-600">{question[1]}%</p>
                   </CardContent>
                 </Card>
               ))}
@@ -201,7 +205,7 @@ const HigherLowerGame = () => {
           </div>
           <Button
             onClick={restartGame}
-            className="w-full text-lg sm:text-xl py-3 sm:py-4"
+            className="w-full text-lg sm:text-xl py-3 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition duration-200"
           >
             Play Again
           </Button>
