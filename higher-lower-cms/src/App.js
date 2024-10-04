@@ -82,16 +82,32 @@ const HigherLowerGame = () => {
   const [gameOver, setGameOver] = useState(false);
   const [answerStatus, setAnswerStatus] = useState(null);
   const [showPastQuestions, setShowPastQuestions] = useState(false);
-  const menuRef = useRef(null);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [userActions, setUserActions] = useState([]);
+  const [gameStartTime, setGameStartTime] = useState(new Date().toISOString());
+  const [currentQuestionAction, setCurrentQuestionAction] = useState(null);
+  const [turn, setTurn] = useState(1);
 
   useEffect(() => {
     resetGame();
   }, []);
 
-  const logUserAction = (action, details) => {
-    console.log("User action:", action, details);
-    // TODO: Implement API call to backend to log action
-  };
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    if (questions.length > 0 && currentIndex < questions.length) {
+      const actionData = {
+        turn: turn,
+        currentQuestionDisplayed: questions[currentIndex][0],
+        currentQuestionDisplayTime: new Date().toISOString(),
+        currentPercentage: questions[currentIndex][1],
+        nextQuestion: questions[currentIndex + 1]?.[0],
+        nextPercentage: questions[currentIndex + 1]?.[1],
+      };
+      setCurrentQuestionAction(actionData);
+    }
+  }, [currentIndex, questions]);
 
   const resetGame = () => {
     let newQuestions = Object.entries(ashwinOrderData);
@@ -102,6 +118,10 @@ const HigherLowerGame = () => {
     setShowAnswer(false);
     setGameOver(false);
     setAnswerStatus(null);
+    setUserActions([]);
+    setGameStartTime(new Date().toISOString());
+    setCurrentQuestionAction(null);
+    setTurn(1);
   };
 
   useEffect(() => {
@@ -123,21 +143,36 @@ const HigherLowerGame = () => {
     const currentPercentage = questions[currentIndex][1];
     const nextPercentage = questions[currentIndex + 1][1];
 
-    const isCorrect =
-      (guess === "higher" && nextPercentage > currentPercentage) ||
-      (guess === "lower" && nextPercentage < currentPercentage);
+    // Determine the correct answer
+    const correctAnswer =
+      nextPercentage > currentPercentage ? "higher" : "lower";
 
+    // Determine if the user's guess is correct
+    const isCorrect = guess === correctAnswer;
+
+    // Calculate current lives left after this turn
+    const currentLivesLeft = isCorrect ? lives : lives - 1;
+
+    // Create the updated action object
+    const updatedAction = {
+      ...currentQuestionAction,
+      userGuess: guess,
+      correctAnswer: correctAnswer,
+      guessTime: new Date().toISOString(),
+      currentLivesLeft: currentLivesLeft,
+    };
+
+    // Add the completed action to userActions
+    setUserActions((prevActions) => [...prevActions, updatedAction]);
+
+    // Reset currentQuestionAction for the next question
+    setCurrentQuestionAction(null);
+
+    // Increment turn counter
+    setTurn((prevTurn) => prevTurn + 1);
+
+    // Proceed with existing game logic
     setAnswerStatus(isCorrect ? "correct" : "incorrect");
-
-    // Log the user's guess
-    logUserAction("guess", {
-      guess,
-      isCorrect,
-      currentQuestion: questions[currentIndex][0],
-      nextQuestion: questions[currentIndex + 1][0],
-      currentPercentage,
-      nextPercentage,
-    });
 
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
@@ -146,7 +181,6 @@ const HigherLowerGame = () => {
         const newLives = prevLives - 1;
         if (newLives <= 0) {
           setGameOver(true);
-          logUserAction("gameOver", { finalScore: score });
         }
         return newLives;
       });
@@ -164,9 +198,37 @@ const HigherLowerGame = () => {
     }, 2000);
   };
 
-  const restartGame = () => {
+  const restartGame = async () => {
+    if (!username || !email) {
+      alert('Please enter your username and email.');
+      return;
+    }
+  
+    const data = {
+      gameType: 'slider_guess',  
+      username,
+      email,
+      finalScore: score,
+      actions: userActions,
+      gameStartTime: gameStartTime,
+      gameEndTime: new Date().toISOString(),
+    };
+  
+    try {
+      await fetch('http://localhost:5000/log_game/higher_or_lower', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+    } catch (error) {
+      console.error('Error logging game data:', error);
+    }
+  
     resetGame();
   };
+  
 
   if (questions.length === 0) return <div>Loading...</div>;
 
@@ -193,22 +255,46 @@ const HigherLowerGame = () => {
           <div className="mb-4">
             <h3 className="font-bold mb-2 text-gray-700">Cards Played:</h3>
             <div className="flex flex-col space-y-4 overflow-y-auto pb-4 max-h-80">
-  {questions.slice(0, currentIndex + 1).map((question, index) => (
-    <Card key={index} className="w-full bg-blue-50 shadow">
-      <CardContent className="p-4">
-        <p className="text-sm text-gray-600">{question[0]}</p>
-        <p className="font-bold text-blue-600">{question[1]}%</p>
-      </CardContent>
-    </Card>
-  ))}
-</div>
+              {questions.slice(0, currentIndex + 1).map((question, index) => (
+                <Card key={index} className="w-full bg-blue-50 shadow">
+                  <CardContent className="p-4">
+                    <p className="text-sm text-gray-600">{question[0]}</p>
+                    <p className="font-bold text-blue-600">{question[1]}%</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+          {/* Username and Email Fields */}
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Username
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              type="text"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
 
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Email
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <Button
             onClick={restartGame}
             className="w-full text-lg sm:text-xl py-3 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition duration-200"
+            disabled={!username || !email} // Disable button if username or email is empty
           >
-            Play Again
+            Submit and Play Again
           </Button>
         </Card>
       </div>
