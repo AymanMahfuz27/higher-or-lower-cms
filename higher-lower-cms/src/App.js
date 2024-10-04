@@ -83,7 +83,6 @@ const HigherLowerGame = () => {
   const [answerStatus, setAnswerStatus] = useState(null);
   const [showPastQuestions, setShowPastQuestions] = useState(false);
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [userActions, setUserActions] = useState([]);
   const [gameStartTime, setGameStartTime] = useState(new Date().toISOString());
   const [currentQuestionAction, setCurrentQuestionAction] = useState(null);
@@ -199,15 +198,14 @@ const HigherLowerGame = () => {
   };
 
   const restartGame = async () => {
-    if (!username || !email) {
-      alert('Please enter your username and email.');
+    if (!username) {
+      alert('Please enter your name.');
       return;
     }
   
     const data = {
       gameType: 'slider_guess',  
       username,
-      email,
       finalScore: score,
       actions: userActions,
       gameStartTime: gameStartTime,
@@ -278,21 +276,12 @@ const HigherLowerGame = () => {
               onChange={(e) => setUsername(e.target.value)}
             />
 
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Email
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            
           </div>
           <Button
             onClick={restartGame}
             className="w-full text-lg sm:text-xl py-3 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition duration-200"
-            disabled={!username || !email} // Disable button if username or email is empty
+            disabled={!username} // Disable button if username or email is empty
           >
             Submit and Play Again
           </Button>
